@@ -282,15 +282,15 @@ def main():
         "Votes by vote type",
         expanded=True
     ):
-        vote_questions = all_votes["vote_question"].unique()
+        vote_questions = all_rolls["vote_question"].unique()
         vote_question = st.selectbox(
             "Select a Vote Question",
             options=vote_questions
         )
 
         st.dataframe(
-            all_votes[
-                all_votes["vote_question"] == vote_question
+            all_rolls[
+                all_rolls["vote_question"] == vote_question
             ]
         )
 
