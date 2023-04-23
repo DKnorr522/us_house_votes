@@ -201,13 +201,6 @@ def main():
     # all_rolls_with_votes = fetch_all_rolls_with_votes(conn, latest_roll_call)
     # st.dataframe(all_rolls_with_votes, use_container_width=True)
 
-    all_votes = pd.read_sql_query(
-        sql="""
-            select * from votes
-        """,
-        con=conn
-    )
-
     with st.expander(
         "All votes cast against the rep's own party",
         expanded=True
