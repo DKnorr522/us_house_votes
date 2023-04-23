@@ -273,7 +273,7 @@ def main():
 
     with st.expander(
         "Votes by vote type",
-        expander=True
+        expanded=True
     ):
         vote_questions = all_rolls["vote_question"].unique
         st.write(vote_questions)
