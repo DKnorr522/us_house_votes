@@ -290,6 +290,7 @@ def main():
             index=7  # "On Passage"
         )
 
+        st.write("made it here")
         st.dataframe(
             all_rolls_with_votes[
                 all_rolls_with_votes["vote_question"] == vote_question
