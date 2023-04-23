@@ -191,9 +191,8 @@ def main():
     latest_roll_call = int(
         all_rolls["roll_call"].max()
     )
-    st.write(f"{latest_roll_call = }")
-    # all_rolls_with_votes = fetch_all_rolls_with_votes(conn, latest_roll_call)
-    # st.dataframe(all_rolls_with_votes)
+    all_rolls_with_votes = fetch_all_rolls_with_votes(conn, latest_roll_call)
+    st.dataframe(all_rolls_with_votes)
 
     all_dissenters = fetch_all_dissenters(conn, cur, False)
     st.dataframe(all_dissenters, use_container_width=True)
