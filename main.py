@@ -168,9 +168,11 @@ def roll_vote_count(roll_id, conn):
 
 def fetch_all_rolls_with_votes(conn, latest_roll_id):
     rolls_list = []
+    year = int(str(latest_roll_id)[:4])
     latest_roll_call = int(str(latest_roll_id)[4:])
     for roll_call in range(1, latest_roll_call + 1):
-        rolls_list.append(roll_vote_count(roll_call, conn))
+        roll_id = int(f"{year}{roll_call}")
+        rolls_list.append(roll_vote_count(roll_id, conn))
     return rolls_list
 
 
