@@ -191,6 +191,7 @@ def main():
     latest_roll_call = int(
         all_rolls["roll_id"].max()
     )
+    print(f"{latest_roll_call = }")
     all_rolls_with_votes = fetch_all_rolls_with_votes(conn, latest_roll_call)
     st.dataframe(all_rolls_with_votes)
 
