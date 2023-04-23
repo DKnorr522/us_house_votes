@@ -281,10 +281,10 @@ def main():
             label.set_color(party_colors[party_designation])
         st.pyplot(fig)
 
-    with st.expander(
-        "Votes by vote type",
-        expanded=True
-    ):
+    # with st.expander(
+    #     "Votes by vote type",
+    #     expanded=True
+    # ):
         # vote_questions = all_rolls_with_votes["vote_question"].unique()
         # vote_question = st.selectbox(
         #     "Select a Vote Question",
