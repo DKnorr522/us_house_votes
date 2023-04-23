@@ -92,7 +92,7 @@ def main():
         step=1
     )
     dissenters = dissenting_votes(int(f"2023{roll_id}"), conn, False)
-    st.dataframe(dissenters)
+    st.dataframe(dissenters, use_container_width=True)
 
 
 if __name__ == "__main__":
