@@ -166,8 +166,9 @@ def roll_vote_count(roll_id, conn):
     return roll_count
 
 
-def fetch_all_rolls_with_votes(conn, latest_roll_call):
+def fetch_all_rolls_with_votes(conn, latest_roll_id):
     rolls_list = []
+    latest_roll_call = int(str(latest_roll_id)[4:])
     for roll_call in range(1, latest_roll_call + 1):
         rolls_list.append(roll_vote_count(roll_call, conn))
     return rolls_list
@@ -194,9 +195,8 @@ def main():
     latest_roll_id = int(
         f"2023{latest_roll_call}"
     )
-    all_rolls_with_votes = fetch_all_rolls_with_votes(conn, latest_roll_call)
-    # st.dataframe(all_rolls_with_votes, use_container_width=True)
-    st.dataframe(fetch_roll_vote(2023192, conn))
+    all_rolls_with_votes = fetch_all_rolls_with_votes(conn, latest_roll_id)
+    st.dataframe(all_rolls_with_votes, use_container_width=True)
 
     all_dissenters = fetch_all_dissenters(conn, cur, False)
     st.dataframe(all_dissenters, use_container_width=True)
