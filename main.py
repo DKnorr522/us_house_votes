@@ -86,9 +86,9 @@ def main():
 
     roll_id = st.slider(
         "Roll Call",
-        min_value=all_rolls.roll_call.min(),
-        max_value=all_rolls.roll_call.max(),
-        value=all_rolls.roll_call.min(),
+        min_value=int(all_rolls.roll_call.min()),
+        max_value=int(all_rolls.roll_call.max()),
+        value=int(all_rolls.roll_call.min()),
         step=1
     )
     st.write(roll_id)
