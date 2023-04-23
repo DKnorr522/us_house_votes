@@ -112,7 +112,7 @@ def main():
     st.dataframe(dissenters, use_container_width=True)
 
     all_dissenters = fetch_all_dissenters(conn, cur, False)
-    st.dataframe(all_dissenters)
+    st.dataframe(all_dissenters, use_container_width=True)
 
 
 if __name__ == "__main__":
