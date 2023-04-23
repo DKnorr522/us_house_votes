@@ -155,7 +155,7 @@ def main():
             "Select District",
             options=all_dissenters[
                 all_dissenters["state"] == state
-            ]
+            ]["district"]
         )
 
     st.dataframe(
