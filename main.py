@@ -171,8 +171,7 @@ def main():
     sns.heatmap(
         state_vote_pivot,
         annot=True,
-        cmap="Greens",
-        linecolor="black"
+        cmap="Greens"
     )
     plt.title(f"Votes for State of {state}")
     plt.xticks(
