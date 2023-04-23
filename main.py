@@ -168,7 +168,7 @@ def main():
     )
 
     fig, ax = plt.subplots(figsize=(12, 12))
-    plt_heatmap = sns.heatmap(
+    sns.heatmap(
         state_vote_pivot,
         annot=True,
         cmap="Greens"
@@ -178,7 +178,7 @@ def main():
         rotation=45,
         ha="right"
     )
-    st.pyplot(plt_heatmap)
+    st.pyplot(fig)
 
 
 if __name__ == "__main__":
