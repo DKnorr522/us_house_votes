@@ -1,6 +1,25 @@
 import streamlit as st
 import pandas as pd
 import sqlite3
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+
+affirmative = ("Yea", "Aye")
+negative = ("Nay", "No")
+positional = affirmative + negative
+non_vote = ("Not Voting", "Present")
+regular = positional + non_vote
+
+
+def fetch_states(conn):
+    states = pd.read_sql_query(
+        sql="""
+            select names from states
+        """,
+        con=conn
+    ).values.tolist()
+    return states
 
 
 def dissenting_votes(roll_id, conn, include_non_votes=True):
@@ -86,6 +105,27 @@ def fetch_all_dissenters(conn, cur, include_non_votes=False):
     return all_dissenters
 
 
+def votes_for_state(state, conn):
+    votes = pd.read_sql_query(
+        sql=f"""
+            select
+                *,
+                first_name | " " || last_name as name
+            from
+                votes
+            join
+                reps on
+                    reps.rep_id = votes.rep_id
+            where
+                state = ? and
+                vote in {regular}
+        """,
+        con=conn,
+        params=(state,)
+    )
+    return votes
+
+
 def main():
     db_path = "congress_roll_calls.db"
     conn = sqlite3.connect(db_path)
@@ -113,6 +153,31 @@ def main():
 
     all_dissenters = fetch_all_dissenters(conn, cur, False)
     st.dataframe(all_dissenters, use_container_width=True)
+
+    states = fetch_states(conn)
+    state = st.selectbox(
+        "Select a state",
+        options=states
+    )
+    state_vote = votes_for_state(state, conn)
+    state_vote_pivot = state_vote[["name", "vote"]].pivot_table(
+        index="name",
+        columns="vote",
+        aggfunc=len,
+        fill_value=0
+    )
+
+    fig, ax = plt.subplots(figsize=(12, 12))
+    sns.heatmap(
+        state_vote_pivot,
+        annot=True,
+        cmap="Greens"
+    )
+    plt.title(f"Votes for State of {state}")
+    plt.xticks(
+        rotation=45,
+        ha="right"
+    )
 
 
 if __name__ == "__main__":
