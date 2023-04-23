@@ -15,7 +15,7 @@ regular = positional + non_vote
 def fetch_states(conn):
     states = pd.read_sql_query(
         sql="""
-            select names from states
+            select name from states
         """,
         con=conn
     ).values.tolist()
