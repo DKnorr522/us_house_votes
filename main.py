@@ -200,9 +200,12 @@ def main():
     all_rolls_with_votes = fetch_all_rolls_with_votes(conn, latest_roll_id)
     # st.dataframe(all_rolls_with_votes, use_container_width=True)
 
-    st.subheader("All votes cast against the rep's own party")
-    all_dissenters = fetch_all_dissenters(conn, cur, False)
-    st.dataframe(all_dissenters, use_container_width=True)
+    with st.expander(
+            "All votes cast against the rep's own party",
+            expanded=True
+    ):
+        all_dissenters = fetch_all_dissenters(conn, cur, False)
+        st.dataframe(all_dissenters, use_container_width=True)
 
     st.subheader("Select a state and district to see that rep's dissenting votes")
     col_state, col_district = st.columns(2)
