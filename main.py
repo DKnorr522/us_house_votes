@@ -167,7 +167,7 @@ def main():
         fill_value=0
     )
 
-    fig, ax = plt.subplots(figsize=(12, 12))
+    fig, ax = plt.subplots()  # figsize=(12, 12))
     sns.heatmap(
         state_vote_pivot,
         annot=True,
