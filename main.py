@@ -167,7 +167,10 @@ def roll_vote_count(roll_id, conn):
 
 
 def fetch_all_rolls_with_votes(conn, latest_roll_call):
-    return 0
+    rolls_list = []
+    for roll_call in range(1, latest_roll_call + 1):
+        rolls_list.append(roll_vote_count(roll_call, conn))
+    return pd.concat(rolls_list, axis=1)
 
 
 def main():
@@ -185,9 +188,11 @@ def main():
         """,
         con=conn
     )
-    last_roll_call = all_rolls["roll_id"].min(), all_rolls["roll_id"].max()
-    st.dataframe(all_rolls)
-    # all_rolls_with_votes = fetch_all_rolls_with_votes(conn, latest_roll_call)
+    latest_roll_call = int(
+        all_rolls["roll_id"].max()
+    )
+    all_rolls_with_votes = fetch_all_rolls_with_votes(conn, latest_roll_call)
+    st.dataframe(all_rolls_with_votes)
 
     all_dissenters = fetch_all_dissenters(conn, cur, False)
     st.dataframe(all_dissenters, use_container_width=True)
