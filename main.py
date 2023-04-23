@@ -170,7 +170,7 @@ def fetch_all_rolls_with_votes(conn, latest_roll_call):
     rolls_list = []
     for roll_call in range(1, latest_roll_call + 1):
         rolls_list.append(roll_vote_count(roll_call, conn))
-    return pd.concat(rolls_list, axis=1)
+    return pd.concat(rolls_list)
 
 
 def main():
