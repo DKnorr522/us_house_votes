@@ -69,6 +69,23 @@ def dissenting_votes(roll_id, conn, include_non_votes=True):
     return dissenters
 
 
+def fetch_all_dissenters(conn, cur, include_non_votes=False):
+    latest_roll_call = cur.execute("""
+        select roll_call from rolls
+        order by roll_call desc
+    """).fetchone()[0]
+
+    all_votes = []
+    for roll in range(latest_roll_call):
+        roll_id_num = int(
+            f"2023{roll+1}"
+        )
+        vote = dissenting_votes(roll_id_num, conn, include_non_votes)
+        all_votes.append(vote)
+    all_dissenters = pd.concat(all_votes).reset_index().drop("index", axis=1)
+    return all_dissenters
+
+
 def main():
     db_path = "congress_roll_calls.db"
     conn = sqlite3.connect(db_path)
@@ -93,6 +110,9 @@ def main():
     )
     dissenters = dissenting_votes(int(f"2023{roll_id}"), conn, False)
     st.dataframe(dissenters, use_container_width=True)
+
+    all_dissenters = fetch_all_dissenters(conn, cur, False)
+    st.dataframe(all_dissenters)
 
 
 if __name__ == "__main__":
