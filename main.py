@@ -180,7 +180,8 @@ def main():
     )
     party_colors = {
         "D": "blue",
-        "R": "red"
+        "R": "red",
+        "L": "yellow"
     }
     for label in ax.get_yticklabels():
         party_designation = label.get_text()[-2]
