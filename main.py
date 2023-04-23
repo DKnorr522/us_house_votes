@@ -200,6 +200,13 @@ def main():
     all_rolls_with_votes = fetch_all_rolls_with_votes(conn, latest_roll_id)
     # st.dataframe(all_rolls_with_votes, use_container_width=True)
 
+    all_votes = pd.read_sql_query(
+        sql="""
+            select * from votes
+        """,
+        con=conn
+    )
+
     with st.expander(
         "All votes cast against the rep's own party",
         expanded=True
@@ -275,8 +282,17 @@ def main():
         "Votes by vote type",
         expanded=True
     ):
-        vote_questions = all_rolls["vote_question"].unique()
-        st.write(vote_questions)
+        vote_questions = all_votes["vote_question"].unique()
+        vote_question = st.selectbox(
+            "Select a Vote Question",
+            options=vote_questions
+        )
+
+        st.dataframe(
+            all_votes[
+                all_votes["vote_question"] == vote_question
+            ]
+        )
 
 
 if __name__ == "__main__":
