@@ -154,7 +154,7 @@ def main():
         district = st.selectbox(
             "Select District",
             options=all_dissenters[
-                all_dissenters["State"] == state
+                all_dissenters["state"] == state
             ]["district"]
         )
 
