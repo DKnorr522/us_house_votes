@@ -170,7 +170,7 @@ def fetch_all_rolls_with_votes(conn, latest_roll_call):
     rolls_list = []
     for roll_call in range(1, latest_roll_call + 1):
         rolls_list.append(roll_vote_count(roll_call, conn))
-    return pd.concat(rolls_list)
+    return rolls_list
 
 
 def main():
@@ -192,7 +192,8 @@ def main():
         all_rolls["roll_call"].max()
     )
     all_rolls_with_votes = fetch_all_rolls_with_votes(conn, latest_roll_call)
-    st.dataframe(all_rolls_with_votes, use_container_width=True)
+    st.write(all_rolls_with_votes)
+    # st.dataframe(all_rolls_with_votes, use_container_width=True)
 
     all_dissenters = fetch_all_dissenters(conn, cur, False)
     st.dataframe(all_dissenters, use_container_width=True)
