@@ -158,7 +158,13 @@ def main():
             ]["district"]
         )
 
-    st.dataframe(all_dissenters, use_container_width=True)
+    st.dataframe(
+        all_dissenters[
+            (all_dissenters["state"] == state) &
+            (all_dissenters["district"] == district)
+        ],
+        use_container_width=True
+    )
 
     # Show votes for reps by state
     state = st.selectbox(
