@@ -175,7 +175,8 @@ def fetch_all_rolls_with_votes(conn, latest_roll_call, year=2023):
 
 
 def main():
-    ss = st.session_state
+    if not "ss" in locals():
+        ss = st.session_state
 
     db_path = "congress_roll_calls.db"
     conn = sqlite3.connect(db_path)
