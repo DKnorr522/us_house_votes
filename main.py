@@ -275,7 +275,7 @@ def main():
         "Votes by vote type",
         expanded=True
     ):
-        vote_questions = all_rolls["vote_question"].unique
+        vote_questions = all_rolls["vote_question"].unique()
         st.write(vote_questions)
 
 
