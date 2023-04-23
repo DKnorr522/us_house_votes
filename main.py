@@ -291,8 +291,8 @@ def main():
         )
 
         st.dataframe(
-            fetch_all_rolls_with_votes[
-                fetch_all_rolls_with_votes["vote_question"] == vote_question
+            vote_questions[
+                vote_questions["vote_question"] == vote_question
             ]
         )
 
