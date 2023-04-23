@@ -147,7 +147,7 @@ def roll_vote_count(roll_id, conn):
             where rolls.roll_id = ?
         """,
         con=conn,
-        params=roll_id,
+        params=(roll_id,)
     ).value_counts("vote").sort_values(ascending=False)
     counts=pd.DataFrame(counts).reset_index()
     counts.columns = ["vote", "count"]
