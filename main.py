@@ -138,7 +138,7 @@ def votes_for_state(state, conn):
     return votes
 
 
-def roll_vote_count(roll_id, conn):
+def fetch_roll_vote_count(roll_id, conn):
     roll = fetch_roll_vote(roll_id, conn)
     counts = pd.read_sql_query(
         sql="""
@@ -181,7 +181,7 @@ def main():
     conn = sqlite3.connect(db_path)
     cur = conn.cursor()
 
-    st.dataframe(fetch_roll_vote(2023192, conn))
+    st.dataframe(fetch_roll_vote_count(2023192, conn))
 
     states = fetch_states(conn)
 
