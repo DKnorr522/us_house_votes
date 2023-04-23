@@ -91,7 +91,7 @@ def main():
         value=int(all_rolls.roll_call.min()),
         step=1
     )
-    dissenters = dissenting_votes(roll_id, conn, False)
+    dissenters = dissenting_votes(int(f"2023{roll_id}"), conn, False)
     st.dataframe(dissenters)
 
 
