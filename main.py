@@ -29,7 +29,7 @@ def fetch_roll_vote(roll_id, conn):
             where roll_id = ?
         """,
         con=conn,
-        params=roll_id,
+        params=(roll_id,)
     )
     return roll
 
@@ -133,7 +133,7 @@ def votes_for_state(state, conn):
                 vote in {regular}
         """,
         con=conn,
-        params=state,
+        params=(state,)
     )
     return votes
 
