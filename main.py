@@ -285,19 +285,18 @@ def main():
         "Votes by vote type",
         expanded=True
     ):
-        vote_questions = all_rolls_with_votes["vote_question"].unique()
-        vote_question = st.selectbox(
-            "Select a Vote Question",
-            options=vote_questions,
-            index=7  # "On Passage"
-        )
-
-        st.write("made it here")
-        st.dataframe(
-            all_rolls_with_votes[
-                all_rolls_with_votes["vote_question"] == vote_question
-            ]
-        )
+        # vote_questions = all_rolls_with_votes["vote_question"].unique()
+        # vote_question = st.selectbox(
+        #     "Select a Vote Question",
+        #     options=vote_questions,
+        #     index=7  # "On Passage"
+        # )
+        #
+        # st.dataframe(
+        #     all_rolls_with_votes[
+        #         all_rolls_with_votes["vote_question"] == vote_question
+        #     ]
+        # )
 
 
 if __name__ == "__main__":
