@@ -175,6 +175,8 @@ def fetch_all_rolls_with_votes(conn, latest_roll_call, year=2023):
 
 
 def main():
+    ss = st.session_state
+
     db_path = "congress_roll_calls.db"
     conn = sqlite3.connect(db_path)
     cur = conn.cursor()
@@ -182,22 +184,26 @@ def main():
     # st.dataframe(fetch_roll_vote_count(2023192, conn))
     st.dataframe(fetch_all_rolls_with_votes(conn, 21))
 
-    states = fetch_states(conn)
+    if "states" not in ss:
+        ss.states = fetch_states(conn)
 
     st.header("US House Votes, 118th Congress")
 
-    all_rolls = pd.read_sql_query(
-        sql="""
-            select * from rolls
-        """,
-        con=conn
-    )
-    latest_roll_call = int(
-        all_rolls["roll_call"].max()
-    )
-    latest_roll_id = int(
-        f"2023{latest_roll_call}"
-    )
+    if "all_rolls" not in ss:
+        ss.all_rolls = pd.read_sql_query(
+            sql="""
+                select * from rolls
+            """,
+            con=conn
+        )
+    if "latest_roll_call" not in ss:
+        ss.latest_roll_call = int(
+            ss.all_rolls["roll_call"].max()
+        )
+    if "latest_roll_id" not in ss:
+        ss.latest_roll_id = int(
+            f"2023{ss.latest_roll_call}"
+        )
     # all_rolls_with_votes = fetch_all_rolls_with_votes(conn, latest_roll_call)
     # st.dataframe(all_rolls_with_votes, use_container_width=True)
 
@@ -205,8 +211,9 @@ def main():
         "All votes cast against the rep's own party",
         expanded=True
     ):
-        all_dissenters = fetch_all_dissenters(conn, cur, False)
-        st.dataframe(all_dissenters, use_container_width=True)
+        if "all_dissenters" not in ss:
+            ss.all_dissenters = fetch_all_dissenters(conn, cur, False)
+        st.dataframe(ss.all_dissenters, use_container_width=True)
 
     with st.expander(
         "Select a state and district to see that rep's dissenting votes",
@@ -216,20 +223,20 @@ def main():
         with col_state:
             state = st.selectbox(
                 "Select State",
-                options=states
+                options=ss.states
             )
         with col_district:
             district = st.selectbox(
                 "Select District",
-                options=all_dissenters[
-                    all_dissenters["state"] == state
+                options=ss.all_dissenters[
+                    ss.all_dissenters["state"] == state
                 ]["district"]
             )
 
         st.dataframe(
-            all_dissenters[
-                (all_dissenters["state"] == state) &
-                (all_dissenters["district"] == district)
+            ss.all_dissenters[
+                (ss.all_dissenters["state"] == state) &
+                (ss.all_dissenters["district"] == district)
             ],
             use_container_width=True
         )
@@ -241,7 +248,7 @@ def main():
         # Show votes for reps by state
         state = st.selectbox(
             "Select a state",
-            options=states
+            options=ss.states
         )
         state_vote = votes_for_state(state, conn)
         state_vote_pivot = state_vote.pivot_table(
