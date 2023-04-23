@@ -109,7 +109,7 @@ def votes_for_state(state, conn):
     votes = pd.read_sql_query(
         sql=f"""
             select
-                *,
+                vote,
                 first_name | " " || last_name as name
             from
                 votes
@@ -160,8 +160,7 @@ def main():
         options=states
     )
     state_vote = votes_for_state(state, conn)
-    st.dataframe(state_vote)
-    state_vote_pivot = state_vote[["name", "vote"]].pivot_table(
+    state_vote_pivot = state_vote.pivot_table(
         index="name",
         columns="vote",
         aggfunc=len,
