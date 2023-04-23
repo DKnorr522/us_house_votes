@@ -166,14 +166,12 @@ def fetch_roll_vote_count(roll_id, conn):
     return roll_count
 
 
-# def fetch_all_rolls_with_votes(conn, latest_roll_id):
-#     rolls_list = []
-#     year = int(str(latest_roll_id)[:4])
-#     latest_roll_call = int(str(latest_roll_id)[4:])
-#     for roll_call in range(1, latest_roll_call + 1):
-#         roll_id = int(f"{year}{roll_call}")
-#         rolls_list.append(roll_vote_count(roll_id, conn))
-#     return pd.DataFrame(rolls_list)
+def fetch_all_rolls_with_votes(conn, latest_roll_call, year=2023):
+    rolls_list = []
+    for roll_call in range(1, latest_roll_call+1):
+        roll_id = int(f"{year}{roll_call}")
+        rolls_list.append(fetch_roll_vote_count(roll_id, conn))
+    return pd.DataFrame(rolls_list)
 
 
 def main():
@@ -181,7 +179,8 @@ def main():
     conn = sqlite3.connect(db_path)
     cur = conn.cursor()
 
-    st.dataframe(fetch_roll_vote_count(2023192, conn))
+    # st.dataframe(fetch_roll_vote_count(2023192, conn))
+    st.dataframe(fetch_all_rolls_with_votes(conn, 21))
 
     states = fetch_states(conn)
 
