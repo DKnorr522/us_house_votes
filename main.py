@@ -110,7 +110,7 @@ def votes_for_state(state, conn):
         sql=f"""
             select
                 vote,
-                first_name | " " || last_name as name
+                first_name || " " || last_name as name
             from
                 votes
             join
@@ -160,7 +160,6 @@ def main():
         options=states
     )
     state_vote = votes_for_state(state, conn)
-    st.dataframe(state_vote)
     state_vote_pivot = state_vote.pivot_table(
         index="name",
         columns="vote",
