@@ -22,6 +22,18 @@ def fetch_states(conn):
     return states
 
 
+def fetch_roll_vote(roll_id, conn):
+    roll = pd.read_sql_query(
+        sql="""
+            select * from rolls
+            where roll_id = ?
+        """,
+        con=conn,
+        params=roll_id,
+    )
+    return roll
+
+
 def dissenting_votes(roll_id, conn, include_non_votes=True):
     present = "" if include_non_votes else "Present"
     not_voting = "" if include_non_votes else "Not Voting"
@@ -121,9 +133,41 @@ def votes_for_state(state, conn):
                 vote in {regular}
         """,
         con=conn,
-        params=(state,)
+        params=state,
     )
     return votes
+
+
+def roll_vote_count(roll_id, conn):
+    roll = fetch_roll_vote(roll_id, conn)
+    counts = pd.read_sql_query(
+        sql="""
+            select * from rolls
+            join votes on votes.roll_id = rolls.roll_id
+            where rolls.roll_id = ?
+        """,
+        con=conn,
+        params=roll_id,
+    ).value_counts("vote").sort_values(ascending=False)
+    counts=pd.DataFrame(counts).reset_index()
+    counts.columns = ["vote", "count"]
+
+    cols = counts["vote"].values.tolist()
+    vals = [(x,) for x in counts["count"].values.tolist()]
+    data = dict(zip(
+        cols,
+        vals
+    ))
+    counts = pd.DataFrame(data)
+    roll_count = pd.concat(
+        [roll, counts],
+        axis=1
+    )
+    return roll_count
+
+
+def fetch_all_rolls_with_votes(conn, latest_roll_call):
+    return 0
 
 
 def main():
@@ -141,6 +185,9 @@ def main():
         """,
         con=conn
     )
+    last_roll_call = all_rolls["roll_id"].min(), all_rolls["roll_id"].max()
+    st.dataframe(all_rolls)
+    # all_rolls_with_votes = fetch_all_rolls_with_votes(conn, latest_roll_call)
 
     all_dissenters = fetch_all_dissenters(conn, cur, False)
     st.dataframe(all_dissenters, use_container_width=True)
