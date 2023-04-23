@@ -82,7 +82,7 @@ def main():
         """,
         con=conn
     )
-    st.dataframe(all_rolls)
+    # st.dataframe(all_rolls)
 
     roll_id = st.slider(
         "Roll Call",
@@ -91,7 +91,8 @@ def main():
         value=int(all_rolls.roll_call.min()),
         step=1
     )
-    st.write(roll_id)
+    dissenters = dissenting_votes(roll_id, conn, False)
+    st.dataframe(dissenters)
 
 
 if __name__ == "__main__":
