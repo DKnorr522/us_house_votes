@@ -209,7 +209,7 @@ def main():
 
     with st.expander(
         "Select a state and district to see that rep's dissenting votes",
-        expanded=False
+        expanded=True
     ):
         col_state, col_district = st.columns(2)
         with col_state:
