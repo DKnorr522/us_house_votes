@@ -13,12 +13,12 @@ regular = positional + non_vote
 
 
 def fetch_states(conn):
-    states = pd.read_sql_query(
+    states = [state[0] for state in pd.read_sql_query(
         sql="""
             select name from states
         """,
         con=conn
-    ).values.tolist()
+    ).values]
     return states
 
 
@@ -160,7 +160,6 @@ def main():
         options=states
     )
     state_vote = votes_for_state(state, conn)
-    st.dataframe(state_vote, use_container_width=True)
     state_vote_pivot = state_vote[["name", "vote"]].pivot_table(
         index="name",
         columns="vote",
