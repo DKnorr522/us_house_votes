@@ -178,6 +178,13 @@ def main():
         rotation=45,
         ha="right"
     )
+    party_colors = {
+        "D": "blue",
+        "R": "red"
+    }
+    for label in ax.get_yticklabels():
+        party_designation = label.get_text()[-2]
+        label.set_color(party_colors[party_designation])
     st.pyplot(fig)
 
 
