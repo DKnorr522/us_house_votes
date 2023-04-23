@@ -195,7 +195,7 @@ def main():
         f"2023{latest_roll_call}"
     )
     all_rolls_with_votes = fetch_all_rolls_with_votes(conn, latest_roll_call)
-    st.dataframe(all_rolls_with_votes, use_container_width=True)
+    # st.dataframe(all_rolls_with_votes, use_container_width=True)
 
     all_dissenters = fetch_all_dissenters(conn, cur, False)
     st.dataframe(all_dissenters, use_container_width=True)
