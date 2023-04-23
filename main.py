@@ -189,7 +189,7 @@ def main():
         con=conn
     )
     latest_roll_call = int(
-        all_rolls["roll_id"].max()
+        all_rolls["roll_call"].max()
     )
     st.write(f"{latest_roll_call = }")
     # all_rolls_with_votes = fetch_all_rolls_with_votes(conn, latest_roll_call)
