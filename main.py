@@ -204,8 +204,9 @@ def main():
         ss.latest_roll_id = int(
             f"2023{ss.latest_roll_call}"
         )
-    # all_rolls_with_votes = fetch_all_rolls_with_votes(conn, latest_roll_call)
-    # st.dataframe(all_rolls_with_votes, use_container_width=True)
+    if "all_rolls_with_votes" not in ss:
+        ss.all_rolls_with_votes = fetch_all_rolls_with_votes(conn, ss.latest_roll_call)
+    # st.dataframe(ss.all_rolls_with_votes, use_container_width=True)
 
     with st.expander(
         "All votes cast against the rep's own party",
