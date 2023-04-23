@@ -143,6 +143,7 @@ def main():
     )
 
     all_dissenters = fetch_all_dissenters(conn, cur, False)
+    st.dataframe(all_dissenters, use_container_width=True)
 
     col_state, col_district = st.columns(2)
     with col_state:
