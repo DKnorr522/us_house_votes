@@ -171,7 +171,7 @@ def fetch_all_rolls_with_votes(conn, latest_roll_call, year=2023):
     for roll_call in range(1, latest_roll_call+1):
         roll_id = int(f"{year}{roll_call}")
         rolls_list.append(fetch_roll_vote_count(roll_id, conn))
-    return pd.DataFrame(rolls_list)
+    return pd.concat(rolls_list)
 
 
 def main():
