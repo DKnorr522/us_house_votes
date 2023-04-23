@@ -271,6 +271,13 @@ def main():
             label.set_color(party_colors[party_designation])
         st.pyplot(fig)
 
+    with st.expander(
+        "Votes by vote type",
+        expander=True
+    ):
+        vote_questions = all_rolls["vote_question"].unique()
+        st.write(vote_questions)
+
 
 if __name__ == "__main__":
     main()
