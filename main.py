@@ -201,69 +201,75 @@ def main():
     # st.dataframe(all_rolls_with_votes, use_container_width=True)
 
     with st.expander(
-            "All votes cast against the rep's own party",
-            expanded=True
+        "All votes cast against the rep's own party",
+        expanded=True
     ):
         all_dissenters = fetch_all_dissenters(conn, cur, False)
         st.dataframe(all_dissenters, use_container_width=True)
 
-    st.subheader("Select a state and district to see that rep's dissenting votes")
-    col_state, col_district = st.columns(2)
-    with col_state:
+    with st.expander(
+        "Select a state and district to see that rep's dissenting votes",
+        expanded=False
+    ):
+        col_state, col_district = st.columns(2)
+        with col_state:
+            state = st.selectbox(
+                "Select State",
+                options=states
+            )
+        with col_district:
+            district = st.selectbox(
+                "Select District",
+                options=all_dissenters[
+                    all_dissenters["state"] == state
+                ]["district"]
+            )
+
+        st.dataframe(
+            all_dissenters[
+                (all_dissenters["state"] == state) &
+                (all_dissenters["district"] == district)
+            ],
+            use_container_width=True
+        )
+
+    with st.expander(
+        "Number of votes cast by each rep in the selected state",
+        expanded=True
+    ):
+        # Show votes for reps by state
         state = st.selectbox(
-            "Select State",
+            "Select a state",
             options=states
         )
-    with col_district:
-        district = st.selectbox(
-            "Select District",
-            options=all_dissenters[
-                all_dissenters["state"] == state
-            ]["district"]
+        state_vote = votes_for_state(state, conn)
+        state_vote_pivot = state_vote.pivot_table(
+            index="name",
+            columns="vote",
+            aggfunc=len,
+            fill_value=0
         )
 
-    st.dataframe(
-        all_dissenters[
-            (all_dissenters["state"] == state) &
-            (all_dissenters["district"] == district)
-        ],
-        use_container_width=True
-    )
-
-    st.subheader("Number of votes cast by each rep in the selected state")
-    # Show votes for reps by state
-    state = st.selectbox(
-        "Select a state",
-        options=states
-    )
-    state_vote = votes_for_state(state, conn)
-    state_vote_pivot = state_vote.pivot_table(
-        index="name",
-        columns="vote",
-        aggfunc=len,
-        fill_value=0
-    )
-
-    fig, ax = plt.subplots(figsize=(12, 12))
-    sns.heatmap(
-        state_vote_pivot,
-        annot=True,
-        cmap="Greens"
-    )
-    plt.title(f"Votes for State of {state}")
-    plt.xticks(
-        rotation=45,
-        ha="right"
-    )
-    party_colors = {
-        "D": "blue",
-        "R": "red",
-        "L": "yellow"
-    }
-    for label in ax.get_yticklabels():
-        party_designation = label.get_text()[-2]
-        label.set_color(party_colors[party_designation])
-    st.pyplot(fig)
+        fig, ax = plt.subplots(figsize=(12, 12))
+        sns.heatmap(
+            state_vote_pivot,
+            annot=True,
+            cmap="Greens"
+        )
+        plt.title(f"Votes for State of {state}")
+        plt.xticks(
+            rotation=45,
+            ha="right"
+        )
+        party_colors = {
+            "D": "blue",
+            "R": "red",
+            "L": "yellow"
+        }
+        for label in ax.get_yticklabels():
+            party_designation = label.get_text()[-2]
+            label.set_color(party_colors[party_designation])
+        st.pyplot(fig)
 
 
 if __name__ == "__main__":
