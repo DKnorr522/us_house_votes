@@ -175,7 +175,11 @@ def fetch_all_rolls_with_votes(conn, latest_roll_call, year=2023):
 
 
 def main():
-    if not "ss" in locals():
+    # if "ss" not in locals():
+    #     ss = st.session_state
+    try:
+        ss
+    except:
         ss = st.session_state
 
     db_path = "congress_roll_calls.db"
