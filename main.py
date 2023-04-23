@@ -183,7 +183,7 @@ def main():
 
     states = fetch_states(conn)
 
-    st.header("Main Title")
+    st.header("US House Votes, 118th Congress")
 
     all_rolls = pd.read_sql_query(
         sql="""
@@ -200,9 +200,11 @@ def main():
     all_rolls_with_votes = fetch_all_rolls_with_votes(conn, latest_roll_id)
     # st.dataframe(all_rolls_with_votes, use_container_width=True)
 
+    st.subheader("All votes cast against the rep's own party")
     all_dissenters = fetch_all_dissenters(conn, cur, False)
     st.dataframe(all_dissenters, use_container_width=True)
 
+    st.subheader("Select a state and district to see that rep's dissenting votes")
     col_state, col_district = st.columns(2)
     with col_state:
         state = st.selectbox(
@@ -225,6 +227,7 @@ def main():
         use_container_width=True
     )
 
+    st.subheader("Number of votes cast by each rep in the selected state")
     # Show votes for reps by state
     state = st.selectbox(
         "Select a state",
