@@ -285,7 +285,8 @@ def main():
         vote_questions = all_rolls["vote_question"].unique()
         vote_question = st.selectbox(
             "Select a Vote Question",
-            options=vote_questions
+            options=vote_questions,
+            index=7  # "On Passage"
         )
 
         st.dataframe(
