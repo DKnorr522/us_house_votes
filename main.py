@@ -131,6 +131,8 @@ def main():
     conn = sqlite3.connect(db_path)
     cur = conn.cursor()
 
+    states = fetch_states(conn)
+
     st.header("Main Title")
 
     all_rolls = pd.read_sql_query(
@@ -139,22 +141,26 @@ def main():
         """,
         con=conn
     )
-    # st.dataframe(all_rolls)
-
-    roll_id = st.slider(
-        "Roll Call",
-        min_value=int(all_rolls.roll_call.min()),
-        max_value=int(all_rolls.roll_call.max()),
-        value=int(all_rolls.roll_call.min()),
-        step=1
-    )
-    dissenters = dissenting_votes(int(f"2023{roll_id}"), conn, False)
-    st.dataframe(dissenters, use_container_width=True)
 
     all_dissenters = fetch_all_dissenters(conn, cur, False)
+
+    col_state, col_district = st.columns(2)
+    with col_state:
+        state = st.selectbox(
+            "Select State",
+            options=states
+        )
+    with col_district:
+        district = st.selectbox(
+            "Select District",
+            options=all_dissenters[
+                all_dissenters["State"] == state
+            ]["district"]
+        )
+
     st.dataframe(all_dissenters, use_container_width=True)
 
-    states = fetch_states(conn)
+    # Show votes for reps by state
     state = st.selectbox(
         "Select a state",
         options=states
