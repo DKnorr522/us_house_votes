@@ -198,7 +198,7 @@ def main():
     latest_roll_id = int(
         f"2023{latest_roll_call}"
     )
-    # all_rolls_with_votes = fetch_all_rolls_with_votes(conn, latest_roll_id)
+    all_rolls_with_votes = fetch_all_rolls_with_votes(conn, latest_roll_id)
     # st.dataframe(all_rolls_with_votes, use_container_width=True)
 
     all_votes = pd.read_sql_query(
@@ -283,7 +283,7 @@ def main():
         "Votes by vote type",
         expanded=True
     ):
-        vote_questions = fetch_all_rolls_with_votes["vote_question"].unique()
+        vote_questions = all_rolls_with_votes["vote_question"].unique()
         vote_question = st.selectbox(
             "Select a Vote Question",
             options=vote_questions,
@@ -291,8 +291,8 @@ def main():
         )
 
         st.dataframe(
-            vote_questions[
-                vote_questions["vote_question"] == vote_question
+            all_rolls_with_votes[
+                all_rolls_with_votes["vote_question"] == vote_question
             ]
         )
 
