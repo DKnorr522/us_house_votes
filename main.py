@@ -22,16 +22,16 @@ def fetch_states(conn):
     return states
 
 
-# def fetch_roll_vote(roll_id, conn):
-#     roll = pd.read_sql_query(
-#         sql="""
-#             select * from rolls
-#             where roll_id = ?
-#         """,
-#         con=conn,
-#         params=(roll_id,)
-#     )
-#     return roll
+def fetch_roll_vote(roll_id, conn):
+    roll = pd.read_sql_query(
+        sql="""
+            select * from rolls
+            where roll_id = ?
+        """,
+        con=conn,
+        params=(roll_id,)
+    )
+    return roll
 
 
 def dissenting_votes(roll_id, conn, include_non_votes=True):
@@ -138,32 +138,32 @@ def votes_for_state(state, conn):
     return votes
 
 
-# def roll_vote_count(roll_id, conn):
-#     roll = fetch_roll_vote(roll_id, conn)
-#     counts = pd.read_sql_query(
-#         sql="""
-#             select * from rolls
-#             join votes on votes.roll_id = rolls.roll_id
-#             where rolls.roll_id = ?
-#         """,
-#         con=conn,
-#         params=(roll_id,)
-#     ).value_counts("vote").sort_values(ascending=False)
-#     counts = pd.DataFrame(counts).reset_index()
-#     counts.columns = ["vote", "count"]
-#
-#     cols = counts["vote"].values.tolist()
-#     vals = [(x,) for x in counts["count"].values.tolist()]
-#     data = dict(zip(
-#         cols,
-#         vals
-#     ))
-#     counts = pd.DataFrame(data)
-#     roll_count = pd.concat(
-#         [roll, counts],
-#         axis=1
-#     )
-#     return roll_count
+def roll_vote_count(roll_id, conn):
+    roll = fetch_roll_vote(roll_id, conn)
+    counts = pd.read_sql_query(
+        sql="""
+            select * from rolls
+            join votes on votes.roll_id = rolls.roll_id
+            where rolls.roll_id = ?
+        """,
+        con=conn,
+        params=(roll_id,)
+    ).value_counts("vote").sort_values(ascending=False)
+    counts = pd.DataFrame(counts).reset_index()
+    counts.columns = ["vote", "count"]
+
+    cols = counts["vote"].values.tolist()
+    vals = [(x,) for x in counts["count"].values.tolist()]
+    data = dict(zip(
+        cols,
+        vals
+    ))
+    counts = pd.DataFrame(data)
+    roll_count = pd.concat(
+        [roll, counts],
+        axis=1
+    )
+    return roll_count
 
 
 # def fetch_all_rolls_with_votes(conn, latest_roll_id):
@@ -180,6 +180,8 @@ def main():
     db_path = "congress_roll_calls.db"
     conn = sqlite3.connect(db_path)
     cur = conn.cursor()
+
+    st.dataframe(fetch_roll_vote(2023192, conn))
 
     states = fetch_states(conn)
 
