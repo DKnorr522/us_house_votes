@@ -110,7 +110,7 @@ def votes_for_state(state, conn):
         sql=f"""
             select
                 vote,
-                first_name || " " || last_name || "(" || party_designation || ")" as name
+                first_name || " " || last_name || " (" || party_designation || ")" as name
             from
                 votes
             join
