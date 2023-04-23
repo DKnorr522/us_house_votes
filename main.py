@@ -198,7 +198,7 @@ def main():
     latest_roll_id = int(
         f"2023{latest_roll_call}"
     )
-    all_rolls_with_votes = fetch_all_rolls_with_votes(conn, latest_roll_id)
+    all_rolls_with_votes = fetch_all_rolls_with_votes(conn, latest_roll_call)
     # st.dataframe(all_rolls_with_votes, use_container_width=True)
 
     all_votes = pd.read_sql_query(
