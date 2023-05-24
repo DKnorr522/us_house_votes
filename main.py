@@ -191,7 +191,10 @@ def main():
     cur = conn.cursor()
 
     # st.dataframe(fetch_roll_vote_count(2023192, conn))
-    st.dataframe(fetch_all_rolls_with_votes(conn, 21, 2))
+    # st.dataframe(fetch_all_rolls_with_votes(conn, 21, 2))
+    first_21_rolls = fetch_all_rolls_with_votes(conn, 21)
+    first_21_rolls["roll_id"] = first_21_rolls["roll_id"].astype(str)
+    st.dataframe(first_21_rolls)
 
     if "states" not in ss:
         ss.states = fetch_states(conn)
