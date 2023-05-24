@@ -226,6 +226,7 @@ def main():
     ):
         if "all_dissenters" not in ss:
             ss.all_dissenters = fetch_all_dissenters(conn, cur, False)
+            ss.all_dissenters["roll_id"] = ss.all_dissenters["roll_id"].astype(str)
         st.dataframe(ss.all_dissenters, use_container_width=True)
 
     with st.expander(
